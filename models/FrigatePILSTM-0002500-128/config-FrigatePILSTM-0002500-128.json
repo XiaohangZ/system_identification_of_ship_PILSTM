@@ -1,0 +1,1 @@
+{"model_class": "deepsysid.models.pinn.Frigate.FrigatePILSTMModel", "parameters": {"device_name": "cuda", "control_names": ["delta", "U"], "state_names": ["r"], "initial_state_names": ["r"], "time_delta": 1.0, "inputNode": 2, "hiddenNode": 128, "outputNode": 1, "sequence_length": 50, "learning_rate": 0.0025, "batch_size": 128, "epochs": 400}}
