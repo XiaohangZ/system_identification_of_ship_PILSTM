@@ -1,0 +1,79 @@
+{
+  "settings": {
+    "time_delta": 1.0,
+    "window_size": 60,
+    "horizon_size": 60,
+    "session": {
+      "total_runs_for_best_models": 3
+    },
+    "control_names": [
+      "delta",
+      "U"
+    ],
+    "state_names": [
+      "r"
+    ],
+    "tracker": {},
+    "additional_tests": {},
+    "target_metric": "nrmse",
+    "metrics": {
+      "nrmse": {
+        "metric_class": "deepsysid.metrics.NormalizedRootMeanSquaredErrorMetric",
+        "parameters": {}
+      }
+    }
+  },
+  "models": [
+    {
+      "model_base_name": "LinearLag",
+      "model_class": "deepsysid.models.linear.LinearLag",
+      "static_parameters": {},
+      "flexible_parameters": {
+        "lag": [5, 15, 30, 45, 60]
+      }
+    }, {
+      "model_base_name": "LSTM",
+      "model_class": "deepsysid.models.recurrent.LSTMInitModel",
+      "static_parameters": {
+        "dropout": 0.25,
+        "bias": true,
+        "sequence_length": 50,
+        "batch_size": 128,
+        "epochs_initializer": 400,
+        "epochs_predictor": 800,
+        "loss": "mse"
+      },
+      "flexible_parameters": {
+        "learning_rate": [0.001, 0.0025],
+        "recurrent_dim": [16, 32, 64],
+        "num_recurrent_layers": [1, 2]
+      }
+    }, {
+      "model_base_name": "PBRL-Linear",
+      "model_class": "deepsysid.models.hybrid.bounded_residual.HybridLinearModel",
+      "static_parameters": {
+        "dropout": 0.25,
+        "bias": true,
+        "sequence_length": 50,
+        "batch_size": 128,
+        "epochs_initializer": 400,
+        "epochs_parallel": 300,
+        "epochs_feedback": 800,
+        "loss": "mse"
+      },
+      "flexible_parameters": {
+        "learning_rate": [0.001, 0.0025],
+        "recurrent_dim": [16, 32, 64],
+        "num_recurrent_layers": [1, 2]
+      }
+    },
+    {
+      "model_base_name": "FrigatePINN",
+      "model_class": "deepysid.models.pinn.frigate.FrigatePINNModel",
+      "static_parameters": {},
+      "flexible_parameters": {
+        "learning_rate": [0.001, 0.0025]
+      }
+    }
+  ]
+}
